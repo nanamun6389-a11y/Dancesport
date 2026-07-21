@@ -9,3 +9,10 @@
 - search.html / judge.html / mc.html / live.html share the same browser data
 
 주의: 현재는 GitHub Pages + localStorage 기반이므로 동일 브라우저 내에서 데이터가 공유됩니다. 실제 여러 기기 동기화는 서버 DB 단계에서 구현해야 합니다.
+
+
+## V4 APDC seed fix
+- Uses a new localStorage key: danceflow_db_apdc_v4
+- Old sample data is ignored.
+- APDC is loaded as the default competition on first open.
+- search/judge/mc/live also load the APDC seed directly.
