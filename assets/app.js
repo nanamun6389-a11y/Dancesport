@@ -1,7 +1,7 @@
 
-const DBKEY='danceflow_db_v1';
+const DBKEY='danceflow_db_apdc_v4';
 const demo=(window.DANCEFLOW_SEED||{competitions:[]});
-function load(){try{const saved=JSON.parse(localStorage.getItem(DBKEY));if(saved&&saved.competitions&&saved.competitions.length)return saved;const fresh=structuredClone(demo);localStorage.setItem(DBKEY,JSON.stringify(fresh));return fresh}catch(e){return structuredClone(demo)}}
+function load(){try{const saved=JSON.parse(localStorage.getItem(DBKEY));if(saved&&saved.competitions&&saved.competitions.some(c=>c.id==='apdc2026'))return saved;const fresh=structuredClone(demo);localStorage.setItem(DBKEY,JSON.stringify(fresh));return fresh}catch(e){const fresh=structuredClone(demo);try{localStorage.setItem(DBKEY,JSON.stringify(fresh))}catch(_){}return fresh}}
 let db=load(), currentId=db.competitions[0]?.id;
 function save(){localStorage.setItem(DBKEY,JSON.stringify(db))}
 function comp(){return db.competitions.find(x=>x.id===currentId)}
