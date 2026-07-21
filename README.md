@@ -16,3 +16,8 @@
 - Old sample data is ignored.
 - APDC is loaded as the default competition on first open.
 - search/judge/mc/live also load the APDC seed directly.
+
+
+## V6 변경사항
+- AI Promo Studio / 홍보 이미지 생성 기능 제거
+- HOME 메뉴 단순화: ENTRY / TIMETABLE / JUDGES / CONTROL / MORE

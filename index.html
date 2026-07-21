@@ -2,217 +2,163 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>DANCEFLOW Competition Platform</title>
-  <link rel="stylesheet" href="assets/style.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>DANCEFLOW</title>
+  <link rel="stylesheet" href="assets/style.css?v=5">
 </head>
 <body>
-
-<div id="passwordGate" style="position:fixed;inset:0;background:#0b0d10;z-index:99999;display:flex;align-items:center;justify-content:center;padding:24px;">
-  <div style="width:min(420px,100%);background:#fff;border-radius:20px;padding:28px;box-shadow:0 25px 70px rgba(0,0,0,.35);">
-    <div style="font-size:13px;letter-spacing:.18em;font-weight:800;color:#6b7280;margin-bottom:12px;">DANCEFLOW ADMIN</div>
-    <h1 style="margin:0 0 8px;font-size:28px;">Administrator Login</h1>
-    <p style="margin:0 0 18px;color:#6b7280;line-height:1.5;">관리자 비밀번호를 입력해주세요.</p>
-    <input id="adminPassword" type="password" inputmode="numeric" placeholder="Password"
-      style="width:100%;padding:14px;border:1px solid #d1d5db;border-radius:10px;font-size:18px;margin-bottom:12px;">
-    <button id="adminLoginBtn" style="width:100%;padding:14px;border:0;border-radius:10px;background:#111827;color:#fff;font-size:16px;font-weight:700;">Enter</button>
-    <div id="adminLoginError" style="display:none;color:#b91c1c;font-size:13px;margin-top:10px;">비밀번호가 맞지 않습니다.</div>
+<div id="passwordGate" class="login-gate">
+  <div class="login-card">
+    <div class="login-brand">DANCEFLOW</div>
+    <h1>Competition Admin</h1>
+    <p>관리자 비밀번호를 입력해주세요.</p>
+    <input id="adminPassword" type="password" inputmode="numeric" placeholder="Password">
+    <button id="adminLoginBtn">Enter</button>
+    <div id="adminLoginError">비밀번호가 맞지 않습니다.</div>
   </div>
 </div>
 <script>
 (function(){
-  const ADMIN_PASSWORD = "0808";
-  const gate = document.getElementById("passwordGate");
-  const input = document.getElementById("adminPassword");
-  const btn = document.getElementById("adminLoginBtn");
-  const err = document.getElementById("adminLoginError");
-
-  function unlock(){
-    sessionStorage.setItem("danceflow_admin_auth","1");
-    gate.style.display = "none";
-  }
-
-  function check(){
-    if(input.value === ADMIN_PASSWORD){
-      err.style.display = "none";
-      unlock();
-    } else {
-      err.style.display = "block";
-      input.select();
-    }
-  }
-
-  if(sessionStorage.getItem("danceflow_admin_auth")==="1"){
-    gate.style.display = "none";
-  }
-
-  btn.addEventListener("click", check);
-  input.addEventListener("keydown", function(e){
-    if(e.key === "Enter") check();
-  });
-  setTimeout(()=>input.focus(), 50);
+  const P="0808",g=document.getElementById("passwordGate"),i=document.getElementById("adminPassword"),
+  b=document.getElementById("adminLoginBtn"),e=document.getElementById("adminLoginError");
+  function ok(){sessionStorage.setItem("danceflow_admin_auth","1");g.style.display="none"}
+  function check(){if(i.value===P){e.style.display="none";ok()}else{e.style.display="block";i.select()}}
+  if(sessionStorage.getItem("danceflow_admin_auth")==="1")g.style.display="none";
+  b.onclick=check;i.addEventListener("keydown",x=>{if(x.key==="Enter")check()});
 })();
 </script>
 
-<header class="topbar">
+<header class="mobile-top">
   <div>
     <div class="brand">DANCEFLOW</div>
-    <div class="tagline">Competition Management Platform</div>
+    <div class="subbrand">Competition Manager</div>
   </div>
-  <div class="top-actions">
-    <select id="competitionSelect"></select>
-    <button class="ghost" id="newCompetitionBtn">+ New Competition</button>
-  </div>
+  <select id="competitionSelect"></select>
 </header>
 
-<div class="layout">
-  <aside class="sidebar">
-    <button class="nav active" data-page="dashboard">Dashboard</button>
-    <button class="nav" data-page="competition">Competition Setup</button>
-    <button class="nav" data-page="entries">Entries</button>
-    <button class="nav" data-page="judges">Judges</button>
-    <button class="nav" data-page="timetable">Timetable</button>
-    <button class="nav" data-page="promo">AI Promo Studio</button>
-    <div class="divider"></div>
-    <a class="nav link" href="search.html" target="_blank">Public Entry Search ↗</a>
-    <a class="nav link" href="judge.html" target="_blank">Judge Screen ↗</a>
-    <a class="nav link" href="mc.html" target="_blank">MC Control ↗</a>
-    <a class="nav link" href="live.html" target="_blank">LIVE Display ↗</a>
-    <div class="divider"></div>
-    <button class="nav" data-page="backup">Backup / Restore</button>
-  </aside>
+<main class="app-shell">
+  <section id="page-dashboard" class="page active">
+    <div class="competition-hero">
+      <div class="hero-label">CURRENT COMPETITION</div>
+      <h1 id="dashName"></h1>
+      <p id="dashMeta"></p>
+    </div>
+    <div class="quick-stats">
+      <div><b id="statEntries">0</b><span>Entries</span></div>
+      <div><b id="statJudges">0</b><span>Judges</span></div>
+      <div><b id="statEvents">0</b><span>Events</span></div>
+      <div><b id="statStart">-</b><span>Start</span></div>
+    </div>
+    <div class="quick-grid">
+      <button class="quick primary" data-go="entries"><strong>ENTRY</strong><span>선수 검색·추가·수정</span></button>
+      <button class="quick primary" data-go="timetable"><strong>TIMETABLE</strong><span>EVENT 순서·시간 수정</span></button>
+      <button class="quick" data-go="judges"><strong>JUDGES</strong><span>심사위원 관리</span></button>
+      <button class="quick" data-go="control"><strong>CONTROL</strong><span>Judge · MC · LIVE</span></button>
+      <button class="quick" data-go="more"><strong>MORE</strong><span>대회 설정·백업</span></button>
+    </div>
+  </section>
 
-  <main class="content">
-    <section id="page-dashboard" class="page active">
-      <div class="hero">
-        <div>
-          <p class="eyebrow">CURRENT COMPETITION</p>
-          <h1 id="dashName"></h1>
-          <p id="dashMeta" class="muted"></p>
-        </div>
-        <div class="status-pill">READY</div>
-      </div>
-      <div class="stats">
-        <div class="stat"><span>Entries</span><strong id="statEntries">0</strong></div>
-        <div class="stat"><span>Judges</span><strong id="statJudges">0</strong></div>
-        <div class="stat"><span>Events</span><strong id="statEvents">0</strong></div>
-        <div class="stat"><span>Start</span><strong id="statStart">-</strong></div>
-      </div>
-      <div class="card">
-        <h2>Competition Workflow</h2>
-        <div class="flow">
-          <div>1. Competition</div><span>→</span><div>2. Entries</div><span>→</span>
-          <div>3. Judges</div><span>→</span><div>4. Timetable</div><span>→</span>
-          <div>5. Judge / MC / LIVE</div><span>→</span><div>6. Results</div>
-        </div>
-      </div>
-    </section>
+  <section id="page-entries" class="page">
+    <div class="page-head"><button class="back">←</button><div><small>REGISTRATION</small><h2>Entries</h2></div><button id="addEntry">+ Add</button></div>
+    <input id="entryFilter" class="big-search" placeholder="이름 · 백넘버 · 종목 검색">
+    <div class="mobile-list" id="entryMobile"></div>
+    <div class="desktop-table"><table><tbody id="entryBody"></tbody></table></div>
+    <input type="file" id="entryCsv" accept=".csv" hidden>
+    <button id="exportEntries" class="hidden-btn">Export</button>
+  </section>
 
-    <section id="page-competition" class="page">
-      <div class="section-head"><div><p class="eyebrow">SETUP</p><h1>Competition</h1></div><button id="saveCompetition">Save</button></div>
-      <div class="card form-grid">
-        <label>Competition Name<input id="compName"></label>
-        <label>Short Name<input id="compShort"></label>
-        <label>Date<input id="compDate" type="date"></label>
-        <label>Start Time<input id="compStart" type="time"></label>
-        <label>Venue<input id="compVenue"></label>
-        <label>City / Country<input id="compCity"></label>
-        <label>Organizer<input id="compOrganizer"></label>
-        <label>Website / Contact<input id="compContact"></label>
-        <label class="wide">Logo / Image<input id="compLogo" type="file" accept="image/*"></label>
-        <div class="wide"><img id="logoPreview" class="logo-preview" alt=""></div>
-      </div>
-    </section>
+  <section id="page-timetable" class="page">
+    <div class="page-head"><button class="back">←</button><div><small>SCHEDULE</small><h2>Timetable</h2></div><button id="addEvent">+ Event</button></div>
+    <div class="schedule-tools">
+      <label>Start<input type="time" id="baseStart"></label>
+      <button id="recalculateTimes">Recalculate</button>
+      <button id="renumberEvents" class="soft">Renumber</button>
+    </div>
+    <div class="mobile-list" id="timeMobile"></div>
+    <div class="desktop-table"><table><tbody id="timeBody"></tbody></table></div>
+  </section>
 
-    <section id="page-entries" class="page">
-      <div class="section-head">
-        <div><p class="eyebrow">REGISTRATION</p><h1>Entries</h1></div>
-        <div>
-          <label class="filebtn">Import CSV<input type="file" id="entryCsv" accept=".csv"></label>
-          <button class="ghost" id="exportEntries">Export CSV</button>
-          <button id="addEntry">+ Add Entry</button>
-        </div>
-      </div>
-      <div class="card">
-        <input id="entryFilter" class="searchbox" placeholder="Search name, back number, event...">
-        <div class="table-wrap"><table>
-          <thead><tr><th>Back No.</th><th>Player / Couple</th><th>Age</th><th>Style</th><th>Event</th><th>Country</th><th></th></tr></thead>
-          <tbody id="entryBody"></tbody>
-        </table></div>
-      </div>
-    </section>
+  <section id="page-judges" class="page">
+    <div class="page-head"><button class="back">←</button><div><small>ADJUDICATORS</small><h2>Judges</h2></div><button id="addJudge">+ Add</button></div>
+    <div class="mobile-list" id="judgeMobile"></div>
+    <div class="desktop-table"><table><tbody id="judgeBody"></tbody></table></div>
+  </section>
 
-    <section id="page-judges" class="page">
-      <div class="section-head"><div><p class="eyebrow">ADJUDICATORS</p><h1>Judges</h1></div><button id="addJudge">+ Add Judge</button></div>
-      <div class="card">
-        <div class="table-wrap"><table>
-          <thead><tr><th>Name</th><th>Country</th><th>Type</th><th>Code</th><th>Active</th><th></th></tr></thead>
-          <tbody id="judgeBody"></tbody>
-        </table></div>
-      </div>
-    </section>
+  <section id="page-control" class="page">
+    <div class="page-head"><button class="back">←</button><div><small>OPERATION</small><h2>Control</h2></div></div>
+    <div class="control-grid">
+      <a href="search.html" target="_blank"><b>SEARCH</b><span>선수용 공개 검색</span></a>
+      <a href="judge.html" target="_blank"><b>JUDGE</b><span>심사 화면</span></a>
+      <a href="mc.html" target="_blank"><b>MC</b><span>MC 진행 화면</span></a>
+      <a href="live.html" target="_blank"><b>LIVE</b><span>대회장 송출 화면</span></a>
+    </div>
+  </section>
 
-    <section id="page-timetable" class="page">
-      <div class="section-head">
-        <div><p class="eyebrow">SCHEDULE</p><h1>Timetable</h1></div>
-        <div><button class="ghost" id="renumberEvents">Renumber Events</button><button id="addEvent">+ Add Event</button></div>
-      </div>
-      <div class="card">
-        <div class="toolbar">
-          <label>Base Start <input type="time" id="baseStart"></label>
-          <button class="ghost" id="recalculateTimes">Recalculate Times</button>
-        </div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>Time</th><th>EVENT</th><th>Round</th><th>Event Name</th><th>Dance</th><th>Duration</th><th>Entries</th><th>Move</th><th></th></tr></thead>
-          <tbody id="timeBody"></tbody>
-        </table></div>
-      </div>
-    </section>
+  <section id="page-more" class="page">
+    <div class="page-head"><button class="back">←</button><div><small>SETTINGS</small><h2>More</h2></div></div>
+    <div class="simple-card form-grid">
+      <label>Competition Name<input id="compName"></label>
+      <label>Short Name<input id="compShort"></label>
+      <label>Date<input id="compDate" type="date"></label>
+      <label>Start<input id="compStart" type="time"></label>
+      <label>Venue<input id="compVenue"></label>
+      <label>City / Country<input id="compCity"></label>
+      <label>Organizer<input id="compOrganizer"></label>
+      <label>Website / Contact<input id="compContact"></label>
+      <input id="compLogo" type="file" accept="image/*">
+      <img id="logoPreview">
+      <button id="saveCompetition">Save Competition</button>
+      <button id="newCompetitionBtn" class="soft">+ New Competition</button>
+      <button id="downloadBackup" class="soft">Download Backup</button>
+      <label class="upload-label">Restore Backup<input type="file" id="restoreBackup" accept=".json"></label>
+      <button id="resetDemo" class="danger">Reset Data</button>
+    </div>
+  </section>
+</main>
 
-    <section id="page-promo" class="page">
-      <div class="section-head"><div><p class="eyebrow">MARKETING</p><h1>AI Promo Studio</h1></div><button id="downloadPoster">Download PNG</button></div>
-      <div class="promo-grid">
-        <div class="card">
-          <label>Headline<input id="promoHeadline" value="ENTRY NOW OPEN"></label>
-          <label>Subheadline<input id="promoSub" value="The floor is yours."></label>
-          <label>Style
-            <select id="promoStyle">
-              <option value="navy">Navy & Silver</option>
-              <option value="black">Black & Gold</option>
-              <option value="white">Minimal White</option>
-            </select>
-          </label>
-          <label>AI Visual Prompt<textarea id="promoPrompt" rows="7">Elegant international dancesport championship poster, cinematic ballroom floor, premium editorial lighting, sophisticated, no text</textarea></label>
-          <button class="ghost" id="generatePrompt">Create AI-ready Prompt</button>
-          <button id="renderPoster">Generate Poster Preview</button>
-          <p class="hint">현재 버전은 브라우저에서 바로 사용할 수 있도록 템플릿 포스터를 생성합니다. 실제 생성형 AI 이미지는 서버의 /api/generate-promo 엔드포인트에 연결하도록 준비되어 있습니다.</p>
-        </div>
-        <div class="poster-stage">
-          <canvas id="posterCanvas" width="1080" height="1350"></canvas>
-        </div>
-      </div>
-    </section>
-
-    <section id="page-backup" class="page">
-      <div class="section-head"><div><p class="eyebrow">DATA</p><h1>Backup / Restore</h1></div></div>
-      <div class="card backup-actions">
-        <button id="downloadBackup">Download Full Backup (.json)</button>
-        <label class="filebtn">Restore Backup<input type="file" id="restoreBackup" accept=".json"></label>
-        <button class="danger" id="resetDemo">Reset Demo Data</button>
-      </div>
-    </section>
-  </main>
-</div>
+<nav class="bottom-nav">
+  <button data-go="dashboard" class="active">HOME</button>
+  <button data-go="entries">ENTRY</button>
+  <button data-go="timetable">TIME</button>
+  <button data-go="control">CONTROL</button>
+</nav>
 
 <dialog id="editorDialog">
   <form method="dialog" id="editorForm">
     <h2 id="editorTitle">Edit</h2>
     <div id="editorFields" class="form-grid"></div>
-    <div class="dialog-actions"><button value="cancel" class="ghost">Cancel</button><button id="editorSave" value="default">Save</button></div>
+    <div class="dialog-actions"><button value="cancel" class="soft">Cancel</button><button id="editorSave" value="default">Save</button></div>
   </form>
 </dialog>
 
-<script src="assets/apdc-data.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/apdc-data.js?v=5"></script>
+<script src="assets/app.js?v=5"></script>
+<script>
+function go(page){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  const p=document.getElementById('page-'+page); if(p)p.classList.add('active');
+  document.querySelectorAll('[data-go]').forEach(x=>x.classList.toggle('active',x.dataset.go===page));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('[data-go]').forEach(x=>x.addEventListener('click',()=>go(x.dataset.go)));
+document.querySelectorAll('.back').forEach(x=>x.addEventListener('click',()=>go('dashboard')));
+
+function syncMobile(){
+ const c=typeof comp==='function'?comp():null;if(!c)return;
+ const e=document.getElementById('entryMobile');
+ if(e)e.innerHTML=c.entries.map(x=>`<div class="list-card"><div class="list-top"><b>#${esc(x.back||'—')} ${esc(x.player)}</b><button onclick="editEntry('${x.id}')">Edit</button></div><p>${esc(x.age)} · ${esc(x.style)}</p><strong>${esc(x.event)}</strong></div>`).join('');
+ const j=document.getElementById('judgeMobile');
+ if(j)j.innerHTML=c.judges.map(x=>`<div class="list-card"><div class="list-top"><b>${esc(x.code||'')} ${esc(x.name)}</b><button onclick="editJudge('${x.id}')">Edit</button></div><p>${esc(x.country)} · ${esc(x.type)} · ${x.active?'Active':'Off'}</p></div>`).join('');
+ const t=document.getElementById('timeMobile');
+ if(t)t.innerHTML=c.timetable.map((x,i)=>`<div class="list-card time-card"><div class="time-line"><b>${esc(x.time)}</b><span>EVENT ${esc(x.no||'—')}</span><em>${esc(x.round)}</em></div><h3>${esc(x.name)}</h3><p>${esc(x.dance||'')} · ${esc(x.duration||'')} · Entries ${esc(x.entries||'')}</p><div class="row-buttons"><button onclick="moveTime(${i},-1)">↑</button><button onclick="moveTime(${i},1)">↓</button><button onclick="editTime('${x.id}')">Edit</button></div></div>`).join('');
+}
+const _renderAll=renderAll;
+renderAll=function(){_renderAll();syncMobile()}
+renderAll();
+entryFilter.addEventListener('input',()=>{
+ const q=entryFilter.value.toLowerCase();
+ document.querySelectorAll('#entryMobile .list-card').forEach(x=>x.style.display=x.innerText.toLowerCase().includes(q)?'block':'none');
+});
+</script>
 </body>
 </html>
