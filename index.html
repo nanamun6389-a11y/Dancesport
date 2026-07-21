@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DANCEFLOW Competition Platform</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div>
+    <div class="brand">DANCEFLOW</div>
+    <div class="tagline">Competition Management Platform</div>
+  </div>
+  <div class="top-actions">
+    <select id="competitionSelect"></select>
+    <button class="ghost" id="newCompetitionBtn">+ New Competition</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <button class="nav active" data-page="dashboard">Dashboard</button>
+    <button class="nav" data-page="competition">Competition Setup</button>
+    <button class="nav" data-page="entries">Entries</button>
+    <button class="nav" data-page="judges">Judges</button>
+    <button class="nav" data-page="timetable">Timetable</button>
+    <button class="nav" data-page="promo">AI Promo Studio</button>
+    <div class="divider"></div>
+    <a class="nav link" href="search.html" target="_blank">Public Entry Search ↗</a>
+    <a class="nav link" href="judge.html" target="_blank">Judge Screen ↗</a>
+    <a class="nav link" href="mc.html" target="_blank">MC Control ↗</a>
+    <a class="nav link" href="live.html" target="_blank">LIVE Display ↗</a>
+    <div class="divider"></div>
+    <button class="nav" data-page="backup">Backup / Restore</button>
+  </aside>
+
+  <main class="content">
+    <section id="page-dashboard" class="page active">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">CURRENT COMPETITION</p>
+          <h1 id="dashName"></h1>
+          <p id="dashMeta" class="muted"></p>
+        </div>
+        <div class="status-pill">READY</div>
+      </div>
+      <div class="stats">
+        <div class="stat"><span>Entries</span><strong id="statEntries">0</strong></div>
+        <div class="stat"><span>Judges</span><strong id="statJudges">0</strong></div>
+        <div class="stat"><span>Events</span><strong id="statEvents">0</strong></div>
+        <div class="stat"><span>Start</span><strong id="statStart">-</strong></div>
+      </div>
+      <div class="card">
+        <h2>Competition Workflow</h2>
+        <div class="flow">
+          <div>1. Competition</div><span>→</span><div>2. Entries</div><span>→</span>
+          <div>3. Judges</div><span>→</span><div>4. Timetable</div><span>→</span>
+          <div>5. Judge / MC / LIVE</div><span>→</span><div>6. Results</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-competition" class="page">
+      <div class="section-head"><div><p class="eyebrow">SETUP</p><h1>Competition</h1></div><button id="saveCompetition">Save</button></div>
+      <div class="card form-grid">
+        <label>Competition Name<input id="compName"></label>
+        <label>Short Name<input id="compShort"></label>
+        <label>Date<input id="compDate" type="date"></label>
+        <label>Start Time<input id="compStart" type="time"></label>
+        <label>Venue<input id="compVenue"></label>
+        <label>City / Country<input id="compCity"></label>
+        <label>Organizer<input id="compOrganizer"></label>
+        <label>Website / Contact<input id="compContact"></label>
+        <label class="wide">Logo / Image<input id="compLogo" type="file" accept="image/*"></label>
+        <div class="wide"><img id="logoPreview" class="logo-preview" alt=""></div>
+      </div>
+    </section>
+
+    <section id="page-entries" class="page">
+      <div class="section-head">
+        <div><p class="eyebrow">REGISTRATION</p><h1>Entries</h1></div>
+        <div>
+          <label class="filebtn">Import CSV<input type="file" id="entryCsv" accept=".csv"></label>
+          <button class="ghost" id="exportEntries">Export CSV</button>
+          <button id="addEntry">+ Add Entry</button>
+        </div>
+      </div>
+      <div class="card">
+        <input id="entryFilter" class="searchbox" placeholder="Search name, back number, event...">
+        <div class="table-wrap"><table>
+          <thead><tr><th>Back No.</th><th>Player / Couple</th><th>Age</th><th>Style</th><th>Event</th><th>Country</th><th></th></tr></thead>
+          <tbody id="entryBody"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <section id="page-judges" class="page">
+      <div class="section-head"><div><p class="eyebrow">ADJUDICATORS</p><h1>Judges</h1></div><button id="addJudge">+ Add Judge</button></div>
+      <div class="card">
+        <div class="table-wrap"><table>
+          <thead><tr><th>Name</th><th>Country</th><th>Type</th><th>Code</th><th>Active</th><th></th></tr></thead>
+          <tbody id="judgeBody"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <section id="page-timetable" class="page">
+      <div class="section-head">
+        <div><p class="eyebrow">SCHEDULE</p><h1>Timetable</h1></div>
+        <div><button class="ghost" id="renumberEvents">Renumber Events</button><button id="addEvent">+ Add Event</button></div>
+      </div>
+      <div class="card">
+        <div class="toolbar">
+          <label>Base Start <input type="time" id="baseStart"></label>
+          <button class="ghost" id="recalculateTimes">Recalculate Times</button>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Time</th><th>EVENT</th><th>Round</th><th>Event Name</th><th>Dance</th><th>Duration</th><th>Entries</th><th>Move</th><th></th></tr></thead>
+          <tbody id="timeBody"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <section id="page-promo" class="page">
+      <div class="section-head"><div><p class="eyebrow">MARKETING</p><h1>AI Promo Studio</h1></div><button id="downloadPoster">Download PNG</button></div>
+      <div class="promo-grid">
+        <div class="card">
+          <label>Headline<input id="promoHeadline" value="ENTRY NOW OPEN"></label>
+          <label>Subheadline<input id="promoSub" value="The floor is yours."></label>
+          <label>Style
+            <select id="promoStyle">
+              <option value="navy">Navy & Silver</option>
+              <option value="black">Black & Gold</option>
+              <option value="white">Minimal White</option>
+            </select>
+          </label>
+          <label>AI Visual Prompt<textarea id="promoPrompt" rows="7">Elegant international dancesport championship poster, cinematic ballroom floor, premium editorial lighting, sophisticated, no text</textarea></label>
+          <button class="ghost" id="generatePrompt">Create AI-ready Prompt</button>
+          <button id="renderPoster">Generate Poster Preview</button>
+          <p class="hint">현재 버전은 브라우저에서 바로 사용할 수 있도록 템플릿 포스터를 생성합니다. 실제 생성형 AI 이미지는 서버의 /api/generate-promo 엔드포인트에 연결하도록 준비되어 있습니다.</p>
+        </div>
+        <div class="poster-stage">
+          <canvas id="posterCanvas" width="1080" height="1350"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-backup" class="page">
+      <div class="section-head"><div><p class="eyebrow">DATA</p><h1>Backup / Restore</h1></div></div>
+      <div class="card backup-actions">
+        <button id="downloadBackup">Download Full Backup (.json)</button>
+        <label class="filebtn">Restore Backup<input type="file" id="restoreBackup" accept=".json"></label>
+        <button class="danger" id="resetDemo">Reset Demo Data</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<dialog id="editorDialog">
+  <form method="dialog" id="editorForm">
+    <h2 id="editorTitle">Edit</h2>
+    <div id="editorFields" class="form-grid"></div>
+    <div class="dialog-actions"><button value="cancel" class="ghost">Cancel</button><button id="editorSave" value="default">Save</button></div>
+  </form>
+</dialog>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
