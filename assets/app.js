@@ -31,11 +31,11 @@ function renderJudges(){
 function renderTime(){
  timeBody.innerHTML=comp().timetable.map((t,i)=>`<tr><td>${esc(t.time)}</td><td>${esc(t.no)}</td><td>${esc(t.round)}</td><td>${esc(t.name)}</td><td>${esc(t.dance)}</td><td>${esc(t.duration)}</td><td>${esc(t.entries)}</td><td><button class="small ghost" onclick="moveTime(${i},-1)">↑</button> <button class="small ghost" onclick="moveTime(${i},1)">↓</button></td><td><button class="small ghost" onclick="editTime('${t.id}')">Edit</button> <button class="small danger" onclick="delTime('${t.id}')">Delete</button></td></tr>`).join('');
 }
-function renderAll(){initSelect();renderDashboard();fillComp();renderEntries();renderJudges();renderTime();renderPoster()}
+function renderAll(){initSelect();renderDashboard();fillComp();renderEntries();renderJudges();renderTime();}
 document.querySelectorAll('.nav[data-page]').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelector('#page-'+b.dataset.page).classList.add('active')})
 newCompetitionBtn.onclick=()=>{const name=prompt('Competition name');if(!name)return;const id=uid('c');db.competitions.push({id,name,short:name,date:'',start:'11:30',venue:'',city:'',organizer:'',contact:'',logo:'',entries:[],judges:[],timetable:[]});currentId=id;save();renderAll()}
 saveCompetition.onclick=()=>{const c=comp();Object.assign(c,{name:compName.value,short:compShort.value,date:compDate.value,start:compStart.value,venue:compVenue.value,city:compCity.value,organizer:compOrganizer.value,contact:compContact.value});save();renderAll();alert('Saved')}
-compLogo.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{comp().logo=r.result;save();fillComp();renderPoster()};r.readAsDataURL(f)}
+compLogo.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{comp().logo=r.result;save();fillComp();};r.readAsDataURL(f)}
 entryFilter.oninput=renderEntries;
 function openEditor(title,fields,onSave){editorTitle.textContent=title;editorFields.innerHTML=fields.map(f=>`<label>${f.label}${f.type==='select'?`<select id="ed_${f.key}">${f.options.map(o=>`<option ${o==f.value?'selected':''}>${o}</option>`).join('')}</select>`:`<input id="ed_${f.key}" value="${esc(f.value??'')}">`}</label>`).join('');editorDialog.showModal();editorSave.onclick=e=>{e.preventDefault();let v={};fields.forEach(f=>v[f.key]=document.getElementById('ed_'+f.key).value);onSave(v);editorDialog.close();save();renderAll()}}
 addEntry.onclick=()=>editEntry();window.editEntry=id=>{let e=comp().entries.find(x=>x.id===id)||{id:uid('e'),back:'',player:'',age:'',style:'Latin',event:'',country:''};openEditor(id?'Edit Entry':'Add Entry',[{key:'back',label:'Back Number',value:e.back},{key:'player',label:'Player / Couple',value:e.player},{key:'age',label:'Age / Category',value:e.age},{key:'style',label:'Style',type:'select',options:['Latin','Modern','Other'],value:e.style},{key:'event',label:'Event',value:e.event},{key:'country',label:'Country',value:e.country}],v=>{Object.assign(e,v);if(!id)comp().entries.push(e)})}
@@ -56,20 +56,11 @@ downloadBackup.onclick=()=>downloadBlob(new Blob([JSON.stringify(db,null,2)],{ty
 restoreBackup.onchange=e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{db=JSON.parse(r.result);currentId=db.competitions[0].id;save();renderAll();alert('Restored')}catch(err){alert('Invalid backup')}};r.readAsText(f)}
 resetDemo.onclick=()=>{if(confirm('Reset all local data?')){db=structuredClone(demo);currentId=db.competitions[0].id;save();renderAll()}}
 function downloadBlob(blob,name){let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
-generatePrompt.onclick=()=>{let c=comp();promoPrompt.value=`Premium international dancesport championship campaign image for ${c.name}, ${c.city||''}. Elegant ballroom floor, dynamic Latin and Standard dance silhouettes, editorial luxury lighting, sophisticated event branding, high-end sports poster, ${promoStyle.value} palette, no text, no logos, vertical composition.`}
-function renderPoster(){
- const c=comp(),can=posterCanvas,ctx=can.getContext('2d'),style=promoStyle?.value||'navy';
- let bg=style==='black'?'#0b0b0c':style==='white'?'#f7f7f5':'#071a33',fg=style==='white'?'#111827':'#f6f7f9',accent=style==='black'?'#c7a34b':style==='white'?'#9ca3af':'#aab6c6';
- ctx.fillStyle=bg;ctx.fillRect(0,0,can.width,can.height);
- ctx.strokeStyle=accent;ctx.lineWidth=2;ctx.strokeRect(60,60,960,1230);
- ctx.fillStyle=accent;ctx.font='600 28px Arial';ctx.fillText('INTERNATIONAL DANCESPORT',90,130);
- ctx.fillStyle=fg;ctx.font='700 72px Arial';wrap(ctx,c.name||'COMPETITION',90,260,900,82);
- ctx.fillStyle=accent;ctx.font='600 34px Arial';ctx.fillText(promoHeadline?.value||'ENTRY NOW OPEN',90,820);
- ctx.fillStyle=fg;ctx.font='400 40px Arial';ctx.fillText(promoSub?.value||'',90,880);
- ctx.fillStyle=accent;ctx.font='500 30px Arial';ctx.fillText([c.date,c.venue,c.city].filter(Boolean).join(' · '),90,1180);
- ctx.fillStyle=fg;ctx.font='700 26px Arial';ctx.fillText(c.short||'',90,1240);
-}
+
+
 function wrap(ctx,text,x,y,max,wlh){let words=text.split(' '),line='';for(let n=0;n<words.length;n++){let test=line+words[n]+' ';if(ctx.measureText(test).width>max&&n>0){ctx.fillText(line,x,y);line=words[n]+' ';y+=wlh}else line=test}ctx.fillText(line,x,y)}
-renderPoster.onclick=renderPoster;promoHeadline.oninput=renderPoster;promoSub.oninput=renderPoster;promoStyle.onchange=renderPoster;
-downloadPoster.onclick=()=>{renderPoster();let a=document.createElement('a');a.download=(comp().short||'competition')+'_poster.png';a.href=posterCanvas.toDataURL('image/png');a.click()}
+
+let a=document.createElement('a');a.download=(comp().short||'competition')+'_poster.png';a.href=posterCanvas.toDataURL('image/png');a.click()}
 renderAll();
+
+;setTimeout(()=>{if(typeof syncMobile==='function')syncMobile()},50);
