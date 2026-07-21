@@ -1,27 +1,7 @@
 
 const DBKEY='danceflow_db_v1';
-const demo={
- competitions:[{
-  id:'apdc2026', name:'2026 Asia Pacific Dancesport Championship', short:'APDC 2026',
-  date:'2026-08-08', start:'11:30', venue:'Seocho Sports Complex', city:'Seoul, Korea',
-  organizer:'APDC Organizing Committee', contact:'', logo:'',
-  entries:[
-   {id:'e1',back:'70',player:'SaRang KIM',age:'Under 12',style:'Latin',event:'C / R / CR',country:'KOR'},
-   {id:'e2',back:'74',player:'ChaeEun PARK',age:'Under 12',style:'Latin',event:'RJ',country:'KOR'},
-   {id:'e3',back:'123',player:'JuEun BYEON',age:'Under 18',style:'Latin',event:'C / R / CR',country:'KOR'}
-  ],
-  judges:[
-   {id:'j1',name:'Raymond Kim',country:'KOR',type:'International',code:'A',active:true},
-   {id:'j2',name:'Lorencia',country:'SGP',type:'International',code:'B',active:true}
-  ],
-  timetable:[
-   {id:'t1',time:'11:30',no:'1',round:'Final',name:'Formation',dance:'Formation',duration:'10:00',entries:'3'},
-   {id:'t2',time:'11:40',no:'2',round:'Quarter Final',name:'Under 12 Solo C',dance:'C',duration:'1:00',entries:'16'},
-   {id:'t3',time:'11:41',no:'3',round:'Quarter Final',name:'Under 12 Solo CR',dance:'C → R',duration:'2:00',entries:'18'}
-  ]
- }]
-};
-function load(){try{return JSON.parse(localStorage.getItem(DBKEY))||structuredClone(demo)}catch(e){return structuredClone(demo)}}
+const demo=(window.DANCEFLOW_SEED||{competitions:[]});
+function load(){try{const saved=JSON.parse(localStorage.getItem(DBKEY));if(saved&&saved.competitions&&saved.competitions.length)return saved;const fresh=structuredClone(demo);localStorage.setItem(DBKEY,JSON.stringify(fresh));return fresh}catch(e){return structuredClone(demo)}}
 let db=load(), currentId=db.competitions[0]?.id;
 function save(){localStorage.setItem(DBKEY,JSON.stringify(db))}
 function comp(){return db.competitions.find(x=>x.id===currentId)}
