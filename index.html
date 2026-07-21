@@ -7,6 +7,53 @@
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
+
+<div id="passwordGate" style="position:fixed;inset:0;background:#0b0d10;z-index:99999;display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div style="width:min(420px,100%);background:#fff;border-radius:20px;padding:28px;box-shadow:0 25px 70px rgba(0,0,0,.35);">
+    <div style="font-size:13px;letter-spacing:.18em;font-weight:800;color:#6b7280;margin-bottom:12px;">DANCEFLOW ADMIN</div>
+    <h1 style="margin:0 0 8px;font-size:28px;">Administrator Login</h1>
+    <p style="margin:0 0 18px;color:#6b7280;line-height:1.5;">관리자 비밀번호를 입력해주세요.</p>
+    <input id="adminPassword" type="password" inputmode="numeric" placeholder="Password"
+      style="width:100%;padding:14px;border:1px solid #d1d5db;border-radius:10px;font-size:18px;margin-bottom:12px;">
+    <button id="adminLoginBtn" style="width:100%;padding:14px;border:0;border-radius:10px;background:#111827;color:#fff;font-size:16px;font-weight:700;">Enter</button>
+    <div id="adminLoginError" style="display:none;color:#b91c1c;font-size:13px;margin-top:10px;">비밀번호가 맞지 않습니다.</div>
+  </div>
+</div>
+<script>
+(function(){
+  const ADMIN_PASSWORD = "0808";
+  const gate = document.getElementById("passwordGate");
+  const input = document.getElementById("adminPassword");
+  const btn = document.getElementById("adminLoginBtn");
+  const err = document.getElementById("adminLoginError");
+
+  function unlock(){
+    sessionStorage.setItem("danceflow_admin_auth","1");
+    gate.style.display = "none";
+  }
+
+  function check(){
+    if(input.value === ADMIN_PASSWORD){
+      err.style.display = "none";
+      unlock();
+    } else {
+      err.style.display = "block";
+      input.select();
+    }
+  }
+
+  if(sessionStorage.getItem("danceflow_admin_auth")==="1"){
+    gate.style.display = "none";
+  }
+
+  btn.addEventListener("click", check);
+  input.addEventListener("keydown", function(e){
+    if(e.key === "Enter") check();
+  });
+  setTimeout(()=>input.focus(), 50);
+})();
+</script>
+
 <header class="topbar">
   <div>
     <div class="brand">DANCEFLOW</div>
