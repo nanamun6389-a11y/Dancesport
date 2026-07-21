@@ -1,0 +1,29 @@
+
+:root{--bg:#f4f5f7;--card:#fff;--text:#101113;--muted:#6b7280;--line:#e5e7eb;--dark:#111827;--accent:#1f2937}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}button{border:0;border-radius:10px;padding:10px 14px;background:#111827;color:white;cursor:pointer}
+button.ghost,.filebtn{background:white;color:#111;border:1px solid var(--line)}button.danger{background:#991b1b}
+.topbar{height:76px;background:#0b0d10;color:white;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:10}
+.brand{font-size:20px;font-weight:800;letter-spacing:.16em}.tagline{font-size:11px;color:#9ca3af;margin-top:4px;letter-spacing:.1em}
+.top-actions{display:flex;gap:10px;align-items:center}.top-actions select{min-width:250px;background:#171a20;color:white;border:1px solid #333;padding:10px;border-radius:8px}
+.layout{display:grid;grid-template-columns:235px 1fr;min-height:calc(100vh - 76px)}
+.sidebar{background:#fff;border-right:1px solid var(--line);padding:18px 12px}
+.nav{display:block;width:100%;text-align:left;margin:4px 0;background:transparent;color:#374151;padding:11px 13px;border-radius:8px;text-decoration:none}
+.nav:hover,.nav.active{background:#111827;color:#fff}.divider{height:1px;background:var(--line);margin:14px 6px}
+.content{padding:28px;max-width:1600px}.page{display:none}.page.active{display:block}
+.hero,.section-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}.hero{background:#111827;color:white;border-radius:18px;padding:28px}
+.hero h1,.section-head h1{margin:4px 0 0}.muted{color:#9ca3af}.eyebrow{font-size:11px;letter-spacing:.16em;font-weight:800;color:#6b7280;margin:0}
+.status-pill{border:1px solid #4b5563;border-radius:999px;padding:7px 12px;font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.stat,.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px}
+.stat span{display:block;color:#6b7280;font-size:12px}.stat strong{font-size:30px;display:block;margin-top:8px}
+.flow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.flow div{background:#f3f4f6;padding:10px 12px;border-radius:10px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.form-grid .wide{grid-column:1/-1}label{display:block;font-size:12px;font-weight:700;color:#4b5563}
+input,select,textarea{width:100%;margin-top:6px;border:1px solid #d1d5db;border-radius:9px;padding:10px;background:white;color:#111}
+.logo-preview{max-height:120px;max-width:240px}.filebtn{display:inline-block;padding:9px 13px;border-radius:10px;cursor:pointer}.filebtn input{display:none}
+.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border-bottom:1px solid #eee;padding:10px 8px;text-align:left;vertical-align:top}th{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em}
+.row-actions{white-space:nowrap}.small{padding:6px 9px;font-size:12px}.searchbox{max-width:420px;margin-bottom:14px}.toolbar{display:flex;gap:12px;align-items:end;margin-bottom:15px}.toolbar label{width:180px}
+.promo-grid{display:grid;grid-template-columns:380px 1fr;gap:18px}.poster-stage{background:#d1d5db;border-radius:16px;padding:18px;display:flex;justify-content:center;align-items:flex-start}
+#posterCanvas{width:min(100%,540px);height:auto;box-shadow:0 20px 50px rgba(0,0,0,.2)}.hint{font-size:12px;color:#6b7280;line-height:1.5}
+dialog{width:min(760px,90vw);border:0;border-radius:16px;padding:22px}dialog::backdrop{background:rgba(0,0,0,.45)}.dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+.backup-actions{display:flex;gap:12px;flex-wrap:wrap}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{display:flex;overflow:auto;border-right:0;border-bottom:1px solid var(--line)}.nav{min-width:max-content;width:auto}.divider{display:none}.content{padding:18px}.stats{grid-template-columns:1fr 1fr}.promo-grid,.form-grid{grid-template-columns:1fr}.form-grid .wide{grid-column:auto}}
